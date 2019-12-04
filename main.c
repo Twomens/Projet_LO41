@@ -1,20 +1,31 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <regex.h>
 
 #define NUMBEROFQUANTUM 100
 #define NUMBEROFFILESPRIORITY 11
 
 int * initProcessAllocTable(void);
+int * initProcess(void);
 
 int main()
 {
+	initProcess();
     initProcessAllocTable();
     return 0;
 }
 
 int * initProcess(void){
+	int numberOfProcessus = 0;
 
+	printf("Please select the number of processus that you want to create : ");
+	scanf("%d",&numberOfProcessus);
+	while(numberOfProcessus == 0){//the fact that we use a %d forbid character so if you enter a character you'lll get '0'
+		printf("Invalid input : ");
+		scanf("%d",&numberOfProcessus);//---------------------------------------------------scanf non bloquant pk?
+	}
+	return 1;
 }
 
 int * initProcessAllocTable(void){
