@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <regex.h>
+#include <pthread.h>
 
 #define NUMBEROFQUANTUM 100
 #define NUMBEROFFILESPRIORITY 11
@@ -12,25 +13,44 @@ int * initProcess(void);
 int main()
 {
 	initProcess();
-    initProcessAllocTable();
+    //initProcessAllocTable();
     return 0;
+}
+
+void *thread(void *arg){
+	printf("Je suis le thread n°%hd! \n",arg);
+	pthread_exit(NULL);
 }
 
 int * initProcess(void){
 	int numberOfProcessus = 0;
+	int threadId=0;
 
 	printf("Please select the number of processus that you want to create : ");
 	scanf("%i",&numberOfProcessus);
 	rewind(stdin);
 	while(numberOfProcessus < 1  || numberOfProcessus > 1000){//the fact that we use a %d forbid character so if you enter a character you'll get '0'
 		printf("Invalid input choose a number between 1 and 1000 : %hd",numberOfProcessus);
-		numberOfProcessus=;
-		rewind(stdin);
+		numberOfProcessus=1;
 		scanf("%d",&numberOfProcessus);//---------------------------------------------------scanf non bloquant pk? prblm avec le int devient inutilisable
+		rewind(stdin);
 		//return 1;
 	}
-	
-	return 1;
+
+	pthread_t tabThread[numberOfProcessus];
+	for(int i=0;i<numberOfProcessus;i++){
+		threadId=i;
+		if(pthread_create(&tabThread[i],NULL, thread, threadId)){
+			perror("ERROR ON THREAD_CREATION");
+			return EXIT_FAILURE;
+		}
+
+		if(pthread_join(tabThread[i],NULL)){
+			perror("ERROR ON THREAD_JOIN");
+			return EXIT_FAILURE;
+		}	
+	}
+	return EXIT_SUCCESS;
 }
 
 int * initProcessAllocTable(void){
@@ -115,7 +135,7 @@ int * initProcessAllocTable(void){
 	}
 
 	printf("\n\nYOUR SET OF VALUES HAS BEEN CORRECTLY SETTlED\n\n");
-	return 1;
+	return EXIT_SUCCESS;
 }
 
 int * initQueue(void){
