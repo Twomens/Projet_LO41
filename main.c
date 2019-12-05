@@ -20,11 +20,16 @@ int * initProcess(void){
 	int numberOfProcessus = 0;
 
 	printf("Please select the number of processus that you want to create : ");
-	scanf("%d",&numberOfProcessus);
-	while(numberOfProcessus == 0){//the fact that we use a %d forbid character so if you enter a character you'lll get '0'
-		printf("Invalid input : ");
-		scanf("%d",&numberOfProcessus);//---------------------------------------------------scanf non bloquant pk?
+	scanf("%i",&numberOfProcessus);
+	rewind(stdin);
+	while(numberOfProcessus < 1  || numberOfProcessus > 1000){//the fact that we use a %d forbid character so if you enter a character you'll get '0'
+		printf("Invalid input choose a number between 1 and 1000 : %hd",numberOfProcessus);
+		numberOfProcessus=;
+		rewind(stdin);
+		scanf("%d",&numberOfProcessus);//---------------------------------------------------scanf non bloquant pk? prblm avec le int devient inutilisable
+		//return 1;
 	}
+	
 	return 1;
 }
 
