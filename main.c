@@ -10,6 +10,14 @@
 int * initProcessAllocTable(void);
 int * initProcess(void);
 
+
+struct threadProperties{
+	int idThread;
+	int submissionDate;
+	int duration;
+	int priority;
+};
+
 int main()
 {
 	initProcess();
@@ -18,29 +26,40 @@ int main()
 }
 
 void *thread(void *arg){
-	printf("Je suis le thread n°%hd! \n",arg);
+	struct threadProperties *structArg=arg;
+	printf("Je suis le thread n°%hd! subDate : %hd duration : %hd priority : %hd \n",structArg->idThread,structArg->submissionDate,structArg->duration,structArg->priority);
+	
 	pthread_exit(NULL);
 }
 
 int * initProcess(void){
 	int numberOfProcessus = 0;
-	int threadId=0;
+
+	srand(time(NULL));
 
 	printf("Please select the number of processus that you want to create : ");
-	scanf("%i",&numberOfProcessus);
+	scanf("%d",&numberOfProcessus);
 	rewind(stdin);
-	while(numberOfProcessus < 1  || numberOfProcessus > 1000){//the fact that we use a %d forbid character so if you enter a character you'll get '0'
+	while(numberOfProcessus < 1  || numberOfProcessus > 10000){//the fact that we use a %d forbid character so if you enter a character you'll get '0'
 		printf("Invalid input choose a number between 1 and 1000 : %hd",numberOfProcessus);
 		numberOfProcessus=1;
 		scanf("%d",&numberOfProcessus);//---------------------------------------------------scanf non bloquant pk? prblm avec le int devient inutilisable
 		rewind(stdin);
 		//return 1;
 	}
-
+	
 	pthread_t tabThread[numberOfProcessus];
+	struct threadProperties *tabStructThreadProperties[numberOfProcessus];
+
 	for(int i=0;i<numberOfProcessus;i++){
-		threadId=i;
-		if(pthread_create(&tabThread[i],NULL, thread, threadId)){
+		tabStructThreadProperties[i]=malloc(sizeof(int)*4);
+
+		tabStructThreadProperties[i]->idThread=i;
+		tabStructThreadProperties[i]->submissionDate=rand() % 5;
+		tabStructThreadProperties[i]->duration=rand() % 11;
+		tabStructThreadProperties[i]->priority=rand() % 11;
+		
+		if(pthread_create(&tabThread[i],NULL, thread, tabStructThreadProperties[i])){
 			perror("ERROR ON THREAD_CREATION");
 			return EXIT_FAILURE;
 		}
