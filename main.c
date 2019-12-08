@@ -7,10 +7,10 @@
 #define NUMBEROFQUANTUM 100
 #define NUMBEROFFILESPRIORITY 11
 
-int numberOfProcessus = 0;
+int numberOfThread = 0;
 
-void queryNbThread(void);
-int * initProcess(struct threadProperties *tabStructThreadProperties[]);
+//void queryNbThread(void);
+//void initProcess(struct threadProperties *tabStructThreadProperties[]);
 int * initProcessAllocTable(void);
 //void insertElement(struct Queue *queue, int nbre);
 //int getOldestElement(struct Queue *queue);
@@ -33,25 +33,24 @@ struct Queue{
 
 /*---------------------------------------------------------MAIN---------------------------------------------------------*/
 
-int main() 
-{
+int main() {
+
 	queryNbThread();
 
-	struct threadProperties *mainTabStructThreadProperties[numberOfProcessus];
+	struct threadProperties *mainTabStructThreadProperties[numberOfThread];
 	initProcess(mainTabStructThreadProperties);
 
     initProcessAllocTable();
 
     struct Queue *queue[NUMBEROFFILESPRIORITY-1];
-    struct Queue *waitForEnterringQueue;
+    struct Queue *waitForEnterringQueue = malloc(sizeof(*waitForEnterringQueue));
     for(int i = 0; i<NUMBEROFFILESPRIORITY ; i++) { queue[i] = malloc(sizeof(*queue));}
 
-    for(int i=0; i<numberOfProcessus ; i++){
+    for(int i=0; i<numberOfThread ; i++){
     	if(mainTabStructThreadProperties[i]->submissionDate == 0){
     		for(int y=0; y<NUMBEROFFILESPRIORITY ; y++){
     			if(mainTabStructThreadProperties[i]->priority == y){
     				insertElement( queue[y] , mainTabStructThreadProperties[i]->idThread);
-    				break;
     			}
     		}
     	}else if(mainTabStructThreadProperties[i]->submissionDate > 0){
@@ -70,7 +69,7 @@ int main()
     }
 
     while(1){
-
+    	
     }
     return 0;
 }
@@ -90,38 +89,38 @@ void queryNbThread(void){
 	srand(time(NULL));
 
 	printf("Please select the number of processus that you want to create : ");
-	scanf("%d",&numberOfProcessus);
+	scanf("%d",&numberOfThread);
 	rewind(stdin);
-	while(numberOfProcessus < 1  || numberOfProcessus > 10000){//the fact that we use a %d forbid character so if you enter a character you'll get '0'
-		printf("Invalid input choose a number between 1 and 1000 : %hd",numberOfProcessus);
-		numberOfProcessus=1;
-		scanf("%d",&numberOfProcessus);//---------------------------------------------------scanf non bloquant pk? prblm avec le int devient inutilisable
+	while(numberOfThread < 1  || numberOfThread > 10000){//the fact that we use a %d forbid character so if you enter a character you'll get '0'
+		printf("Invalid input choose a number between 1 and 1000 : %hd",numberOfThread);
+		numberOfThread=1;
+		scanf("%d",&numberOfThread);//---------------------------------------------------scanf non bloquant pk? prblm avec le int devient inutilisable
 		rewind(stdin);	
-		//return 1;
+		return 1;
 	}
 }
 
-int * initProcess(struct threadProperties *tabStructThreadProperties[]){
+void initProcess(struct threadProperties *tabStructThreadProperties[]){
 
-	for(int i=0;i<numberOfProcessus;i++){
+	for(int i=0;i<numberOfThread;i++){
 		tabStructThreadProperties[i]=malloc(sizeof(tabStructThreadProperties[i]));
 
 		tabStructThreadProperties[i]->idThread=i;
-		tabStructThreadProperties[i]->submissionDate=rand() % 5;
+		tabStructThreadProperties[i]->submissionDate=rand() % 3;
 		tabStructThreadProperties[i]->duration=rand() % 11;
 		tabStructThreadProperties[i]->priority=rand() % 11;
 		
 		if(pthread_create(&tabStructThreadProperties[i]->thread,NULL, thread, tabStructThreadProperties[i])){
 			perror("ERROR ON THREAD_CREATION");
-			return EXIT_FAILURE;
+			//return EXIT_FAILURE;
 		}
 
 		if(pthread_join(tabStructThreadProperties[i]->thread,NULL)){
 			perror("ERROR ON THREAD_JOIN");
-			return EXIT_FAILURE;
+			//return EXIT_FAILURE;
 		}
 	}
-	return tabStructThreadProperties;
+	//return EXIT_SUCCESS;
 }
 
 int * initProcessAllocTable(void){
