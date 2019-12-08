@@ -9,6 +9,8 @@
 
 int * initProcessAllocTable(void);
 int * initProcess(void);
+//void insertElement(struct Queue *queue, int nbre);
+//int getOldestElement(struct Queue *queue);
 
 
 struct threadProperties{
@@ -17,11 +19,26 @@ struct threadProperties{
 	int duration;
 	int priority;
 };
+struct Element{
+	int nombre;
+	struct Element *nextElement;
+};
+struct Queue{
+	struct Element *firstElement
+};
 
 int main()
 {
 	initProcess();
-    //initProcessAllocTable();
+    //ProcessAllocTable();
+    struct Queue *queue = malloc(sizeof(*queue));
+    insertElement(queue,1);
+    insertElement(queue,2);
+    insertElement(queue,3);
+    insertElement(queue,4);
+    insertElement(queue,5);
+    getOldestElement(queue);
+    getOldestElement(queue);
     return 0;
 }
 
@@ -44,7 +61,7 @@ int * initProcess(void){
 		printf("Invalid input choose a number between 1 and 1000 : %hd",numberOfProcessus);
 		numberOfProcessus=1;
 		scanf("%d",&numberOfProcessus);//---------------------------------------------------scanf non bloquant pk? prblm avec le int devient inutilisable
-		rewind(stdin);
+		rewind(stdin);	
 		//return 1;
 	}
 	
@@ -67,7 +84,7 @@ int * initProcess(void){
 		if(pthread_join(tabThread[i],NULL)){
 			perror("ERROR ON THREAD_JOIN");
 			return EXIT_FAILURE;
-		}	
+		}
 	}
 	return EXIT_SUCCESS;
 }
@@ -157,6 +174,35 @@ int * initProcessAllocTable(void){
 	return EXIT_SUCCESS;
 }
 
-int * initQueue(void){
+void insertElement(struct Queue *queue, int nbre){
+	struct Element *newElement = malloc(sizeof(*newElement));
 
+	newElement->nombre = nbre;
+	newElement->nextElement = queue->firstElement;
+	queue->firstElement = newElement;
+}
+
+int getOldestElement(struct Queue *queue){
+	struct Element *currentElement = queue->firstElement;
+	int nb=0;
+
+	if(queue->firstElement == NULL){
+		printf("nobody\n");
+		return -1;
+	}
+	if(queue->firstElement->nextElement ==NULL){
+		nb=queue->firstElement->nombre;
+		queue->firstElement=NULL;
+		free(queue->firstElement);
+		printf(" nb : %hd\n",nb);
+		return nb;
+	}
+	while(currentElement->nextElement->nextElement!=NULL){
+		currentElement = currentElement->nextElement;
+	}
+	nb=currentElement->nextElement->nombre;
+	free(currentElement->nextElement);
+	currentElement->nextElement=NULL;
+	printf(" nb : %hd\n",nb);
+	return nb;
 }
