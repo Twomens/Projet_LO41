@@ -7,8 +7,11 @@
 #define NUMBEROFQUANTUM 100
 #define NUMBEROFFILESPRIORITY 11
 
+int numberOfProcessus = 0;
+
+void queryNbThread(void);
+int * initProcess(struct threadProperties *tabStructThreadProperties[]);
 int * initProcessAllocTable(void);
-int * initProcess(void);
 //void insertElement(struct Queue *queue, int nbre);
 //int getOldestElement(struct Queue *queue);
 
@@ -18,6 +21,7 @@ struct threadProperties{
 	int submissionDate;
 	int duration;
 	int priority;
+	pthread_t thread;
 };
 struct Element{
 	int nombre;
@@ -27,18 +31,47 @@ struct Queue{
 	struct Element *firstElement
 };
 
-int main()
+/*---------------------------------------------------------MAIN---------------------------------------------------------*/
+
+int main() 
 {
-	initProcess();
-    //ProcessAllocTable();
-    struct Queue *queue = malloc(sizeof(*queue));
-    insertElement(queue,1);
-    insertElement(queue,2);
-    insertElement(queue,3);
-    insertElement(queue,4);
-    insertElement(queue,5);
-    getOldestElement(queue);
-    getOldestElement(queue);
+	queryNbThread();
+
+	struct threadProperties *mainTabStructThreadProperties[numberOfProcessus];
+	initProcess(mainTabStructThreadProperties);
+
+    initProcessAllocTable();
+
+    struct Queue *queue[NUMBEROFFILESPRIORITY-1];
+    struct Queue *waitForEnterringQueue;
+    for(int i = 0; i<NUMBEROFFILESPRIORITY ; i++) { queue[i] = malloc(sizeof(*queue));}
+
+    for(int i=0; i<numberOfProcessus ; i++){
+    	if(mainTabStructThreadProperties[i]->submissionDate == 0){
+    		for(int y=0; y<NUMBEROFFILESPRIORITY ; y++){
+    			if(mainTabStructThreadProperties[i]->priority == y){
+    				insertElement( queue[y] , mainTabStructThreadProperties[i]->idThread);
+    				break;
+    			}
+    		}
+    	}else if(mainTabStructThreadProperties[i]->submissionDate > 0){
+    		mainTabStructThreadProperties[i]->submissionDate--;
+    		insertElement( waitForEnterringQueue , mainTabStructThreadProperties[i]->idThread);
+    	}else{
+    		printf("ERROR : a thread can't enter the queue during initialisation");
+    	}
+    }
+
+    printf("Wainting queue : \n\n");
+    displayQueue(waitForEnterringQueue);
+    for(int i = 0; i<NUMBEROFFILESPRIORITY ; i++){
+    	printf("Queue %hd : \n\n",i);
+    	displayQueue(queue[i]);
+    }
+
+    while(1){
+
+    }
     return 0;
 }
 
@@ -46,12 +79,14 @@ void *thread(void *arg){
 	struct threadProperties *structArg=arg;
 	printf("Je suis le thread n°%hd! subDate : %hd duration : %hd priority : %hd \n",structArg->idThread,structArg->submissionDate,structArg->duration,structArg->priority);
 	
+	/*while(structArg->duration > 0){
+
+	}*/
+
 	pthread_exit(NULL);
 }
 
-int * initProcess(void){
-	int numberOfProcessus = 0;
-
+void queryNbThread(void){
 	srand(time(NULL));
 
 	printf("Please select the number of processus that you want to create : ");
@@ -64,29 +99,29 @@ int * initProcess(void){
 		rewind(stdin);	
 		//return 1;
 	}
-	
-	pthread_t tabThread[numberOfProcessus];
-	struct threadProperties *tabStructThreadProperties[numberOfProcessus];
+}
+
+int * initProcess(struct threadProperties *tabStructThreadProperties[]){
 
 	for(int i=0;i<numberOfProcessus;i++){
-		tabStructThreadProperties[i]=malloc(sizeof(int)*4);
+		tabStructThreadProperties[i]=malloc(sizeof(tabStructThreadProperties[i]));
 
 		tabStructThreadProperties[i]->idThread=i;
 		tabStructThreadProperties[i]->submissionDate=rand() % 5;
 		tabStructThreadProperties[i]->duration=rand() % 11;
 		tabStructThreadProperties[i]->priority=rand() % 11;
 		
-		if(pthread_create(&tabThread[i],NULL, thread, tabStructThreadProperties[i])){
+		if(pthread_create(&tabStructThreadProperties[i]->thread,NULL, thread, tabStructThreadProperties[i])){
 			perror("ERROR ON THREAD_CREATION");
 			return EXIT_FAILURE;
 		}
 
-		if(pthread_join(tabThread[i],NULL)){
+		if(pthread_join(tabStructThreadProperties[i]->thread,NULL)){
 			perror("ERROR ON THREAD_JOIN");
 			return EXIT_FAILURE;
 		}
 	}
-	return EXIT_SUCCESS;
+	return tabStructThreadProperties;
 }
 
 int * initProcessAllocTable(void){
@@ -205,4 +240,16 @@ int getOldestElement(struct Queue *queue){
 	currentElement->nextElement=NULL;
 	printf(" nb : %hd\n",nb);
 	return nb;
+}
+
+void displayQueue(struct Queue *queue)
+{
+    struct Element *currentElement = queue->firstElement;
+
+    while (currentElement != NULL)
+    {
+        printf("%d -> ", currentElement->nombre);
+        currentElement = currentElement->nextElement;
+    }
+    printf("NULL\n");
 }
