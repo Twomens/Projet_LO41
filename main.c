@@ -37,7 +37,7 @@ int main() {
 
 	int *processAllocTable_Quantum=malloc(sizeof(int)*NUMBEROFQUANTUM);
 	
-	int currentQuantum=0,currentQueue=0,currentThread=0;;
+	int currentQuantum=0,currentQueue=0,currentThread=0;
 
 	queryNbThread();
 
@@ -65,18 +65,18 @@ int main() {
     	}
     }
 
-    printf("Wainting queue : \n\n");
+    printf("Init_Wainting queue : \n\n");
     displayQueue(waitForEnterringQueue);
     for(int i = 0; i<NUMBEROFFILESPRIORITY ; i++){
     	printf("Queue %hd : \n\n",i);
     	displayQueue(queue[i]);
     }
-
+/*
     for(int i=0;i<NUMBEROFQUANTUM;i++){
     	printf("i : %hd , tab : %hd\n",i,processAllocTable_Quantum[i]);
     }
-
-    while(currentQuantum!=50){
+*/
+    while(currentQuantum!=5){
     	printf("CURRENT QUANTUM %hd ",currentQuantum);
     	if(currentQuantum>=NUMBEROFQUANTUM){
     		currentQuantum=0;
