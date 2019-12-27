@@ -11,7 +11,7 @@ int numberOfThread = 0;
 
 //void queryNbThread(void);
 //void initProcess(struct threadProperties *tabStructThreadProperties[]);
-int * initProcessAllocTable(void);
+int * initProcessAllocTable(int processAllocTable_Quantum[]);
 //void insertElement(struct Queue *queue, int nbre);
 //int getOldestElement(struct Queue *queue);
 
@@ -35,12 +35,16 @@ struct Queue{
 
 int main() {
 
+	int *processAllocTable_Quantum=malloc(sizeof(int)*NUMBEROFQUANTUM);
+	
+	int currentQuantum=0,currentQueue=0,currentThread=0;;
+
 	queryNbThread();
 
 	struct threadProperties *mainTabStructThreadProperties[numberOfThread];
 	initProcess(mainTabStructThreadProperties);
 
-    initProcessAllocTable();
+    initProcessAllocTable(processAllocTable_Quantum);
 
     struct Queue *queue[NUMBEROFFILESPRIORITY-1];
     struct Queue *waitForEnterringQueue = malloc(sizeof(*waitForEnterringQueue));
@@ -68,8 +72,36 @@ int main() {
     	displayQueue(queue[i]);
     }
 
-    while(1){
-    	
+    for(int i=0;i<NUMBEROFQUANTUM;i++){
+    	printf("i : %hd , tab : %hd\n",i,processAllocTable_Quantum[i]);
+    }
+
+    while(currentQuantum!=50){
+    	printf("CURRENT QUANTUM %hd ",currentQuantum);
+    	if(currentQuantum>=NUMBEROFQUANTUM){
+    		currentQuantum=0;
+    	}
+    	currentQueue=processAllocTable_Quantum[currentQuantum];
+    	currentThread = getOldestElement(queue[currentQueue]);
+    	while(currentThread==-1){//																		PRBLM BOUCLE INFINIE SI PLUS PERSONNES DANS LES FILES
+    		//																							on va a celle d'après suivre la table d'alloc processus ou pas?
+    		if(currentQueue<=NUMBEROFFILESPRIORITY-2)currentQueue++;
+    		else currentQueue=0;
+    		currentThread = getOldestElement(queue[currentQueue]);
+    	}
+    	printf("CURRENT QUEUE %hd CURRENT THREAD %hd\n",currentQueue,currentThread);
+    	/*
+    	exec the thread 																						AJOUTER LA WAIT FOR ENTERRING QUEUE
+    	*/
+    	if(currentQueue<=NUMBEROFFILESPRIORITY-2)insertElement(queue[currentQueue+1],currentThread);
+    	else insertElement(queue[0],currentThread);
+
+    	for(int i = 0; i<NUMBEROFFILESPRIORITY ; i++){
+    		printf("Queue %hd : \n",i);
+    		displayQueue(queue[i]);
+    	}
+    	currentQuantum++;
+    	printf("\n\n");
     }
     return 0;
 }
@@ -123,10 +155,9 @@ void initProcess(struct threadProperties *tabStructThreadProperties[]){
 	//return EXIT_SUCCESS;
 }
 
-int * initProcessAllocTable(void){
+int * initProcessAllocTable(int processAllocTable_Quantum []){
 
 	int processAllocTable_Percentage [2][NUMBEROFFILESPRIORITY];//no need of 2 lines enough with the indice
-	int processAllocTable_Quantum [NUMBEROFQUANTUM];
 	int setOfValue [NUMBEROFFILESPRIORITY] = {26,20,15,10,8,6,5,4,3,2,1};
 	int percentageRemaining=100,sumPercentage=0,cptFilePriority=0;
 
@@ -192,7 +223,7 @@ int * initProcessAllocTable(void){
 			}while(sumPercentage!=100);
 		}
 	}
-
+	cptFilePriority=0;
 	for(int i=0;i<NUMBEROFQUANTUM;i++){//-------------------------------------------------------------------problem only work with a hundred quantum and deleate the tab CPU_percentage
 		while(processAllocTable_Percentage[1][cptFilePriority] == 0){//if you don't have anymore value in the tab cpu
 			if(cptFilePriority>=NUMBEROFFILESPRIORITY-1) cptFilePriority=0;//to avoid outpassing the max value of list
@@ -241,8 +272,7 @@ int getOldestElement(struct Queue *queue){
 	return nb;
 }
 
-void displayQueue(struct Queue *queue)
-{
+void displayQueue(struct Queue *queue){
     struct Element *currentElement = queue->firstElement;
 
     while (currentElement != NULL)
