@@ -13,7 +13,7 @@ int numberOfThread = 0;
 //void initProcess(struct threadProperties *tabStructThreadProperties[]);
 int * initProcessAllocTable(int processAllocTable_Quantum[]);
 //void insertElement(struct Queue *queue, int nbre);
-//int getOldestElement(struct Queue *queue);
+//struct threadProperties * getOldestElement(struct Queue *queue);
 
 
 struct threadProperties{
@@ -23,88 +23,16 @@ struct threadProperties{
 	int priority;
 	pthread_t thread;
 };
+
 struct Element{
-	int nombre;
+	struct threadProperties *threadProperties;
 	struct Element *nextElement;
 };
+
 struct Queue{
-	struct Element *firstElement
+	struct Element *firstElement;
 };
 
-/*---------------------------------------------------------MAIN---------------------------------------------------------*/
-
-int main() {
-
-	int *processAllocTable_Quantum=malloc(sizeof(int)*NUMBEROFQUANTUM);
-	
-	int currentQuantum=0,currentQueue=0,currentThread=0;
-
-	queryNbThread();
-
-	struct threadProperties *mainTabStructThreadProperties[numberOfThread];
-	initProcess(mainTabStructThreadProperties);
-
-    initProcessAllocTable(processAllocTable_Quantum);
-
-    struct Queue *queue[NUMBEROFFILESPRIORITY-1];
-    struct Queue *waitForEnterringQueue = malloc(sizeof(*waitForEnterringQueue));
-    for(int i = 0; i<NUMBEROFFILESPRIORITY ; i++) { queue[i] = malloc(sizeof(*queue));}
-
-    for(int i=0; i<numberOfThread ; i++){
-    	if(mainTabStructThreadProperties[i]->submissionDate == 0){
-    		for(int y=0; y<NUMBEROFFILESPRIORITY ; y++){
-    			if(mainTabStructThreadProperties[i]->priority == y){
-    				insertElement( queue[y] , mainTabStructThreadProperties[i]->idThread);
-    			}
-    		}
-    	}else if(mainTabStructThreadProperties[i]->submissionDate > 0){
-    		mainTabStructThreadProperties[i]->submissionDate--;
-    		insertElement( waitForEnterringQueue , mainTabStructThreadProperties[i]->idThread);
-    	}else{
-    		printf("ERROR : a thread can't enter the queue during initialisation");
-    	}
-    }
-
-    printf("Init_Wainting queue : \n\n");
-    displayQueue(waitForEnterringQueue);
-    for(int i = 0; i<NUMBEROFFILESPRIORITY ; i++){
-    	printf("Queue %hd : \n\n",i);
-    	displayQueue(queue[i]);
-    }
-/*
-    for(int i=0;i<NUMBEROFQUANTUM;i++){
-    	printf("i : %hd , tab : %hd\n",i,processAllocTable_Quantum[i]);
-    }
-*/
-    while(currentQuantum!=5){
-    	printf("CURRENT QUANTUM %hd ",currentQuantum);
-    	if(currentQuantum>=NUMBEROFQUANTUM){
-    		currentQuantum=0;
-    	}
-    	currentQueue=processAllocTable_Quantum[currentQuantum];
-    	currentThread = getOldestElement(queue[currentQueue]);
-    	while(currentThread==-1){//																		PRBLM BOUCLE INFINIE SI PLUS PERSONNES DANS LES FILES
-    		//																							on va a celle d'après suivre la table d'alloc processus ou pas?
-    		if(currentQueue<=NUMBEROFFILESPRIORITY-2)currentQueue++;
-    		else currentQueue=0;
-    		currentThread = getOldestElement(queue[currentQueue]);
-    	}
-    	printf("CURRENT QUEUE %hd CURRENT THREAD %hd\n",currentQueue,currentThread);
-    	/*
-    	exec the thread 																						AJOUTER LA WAIT FOR ENTERRING QUEUE
-    	*/
-    	if(currentQueue<=NUMBEROFFILESPRIORITY-2)insertElement(queue[currentQueue+1],currentThread);
-    	else insertElement(queue[0],currentThread);
-
-    	for(int i = 0; i<NUMBEROFFILESPRIORITY ; i++){
-    		printf("Queue %hd : \n",i);
-    		displayQueue(queue[i]);
-    	}
-    	currentQuantum++;
-    	printf("\n\n");
-    }
-    return 0;
-}
 
 void *thread(void *arg){
 	struct threadProperties *structArg=arg;
@@ -239,37 +167,40 @@ int * initProcessAllocTable(int processAllocTable_Quantum []){
 	return EXIT_SUCCESS;
 }
 
-void insertElement(struct Queue *queue, int nbre){
+void insertElement(struct Queue *queue, struct threadProperties *threadProperties){
 	struct Element *newElement = malloc(sizeof(*newElement));
 
-	newElement->nombre = nbre;
+	newElement->threadProperties=threadProperties;
 	newElement->nextElement = queue->firstElement;
 	queue->firstElement = newElement;
 }
 
-int getOldestElement(struct Queue *queue){
+struct threadProperties *getOldestElement(struct Queue *queue){
 	struct Element *currentElement = queue->firstElement;
 	int nb=0;
+	struct threadProperties *Thread;
 
 	if(queue->firstElement == NULL){
 		printf("nobody\n");
-		return -1;
+		Thread=malloc(sizeof(struct threadProperties));
+		Thread->idThread=-1;
+		return Thread;
 	}
 	if(queue->firstElement->nextElement ==NULL){
-		nb=queue->firstElement->nombre;
+		Thread=queue->firstElement->threadProperties;
+		printf("Thread nb : %hd\n",queue->firstElement->threadProperties->idThread);
 		queue->firstElement=NULL;
 		free(queue->firstElement);
-		printf(" nb : %hd\n",nb);
-		return nb;
+		return Thread;
 	}
 	while(currentElement->nextElement->nextElement!=NULL){
 		currentElement = currentElement->nextElement;
 	}
-	nb=currentElement->nextElement->nombre;
+	Thread=currentElement->nextElement->threadProperties;
+	printf("Thread nb : %hd\n",currentElement->nextElement->threadProperties->idThread);
 	free(currentElement->nextElement);
 	currentElement->nextElement=NULL;
-	printf(" nb : %hd\n",nb);
-	return nb;
+	return Thread;
 }
 
 void displayQueue(struct Queue *queue){
@@ -277,8 +208,102 @@ void displayQueue(struct Queue *queue){
 
     while (currentElement != NULL)
     {
-        printf("%d -> ", currentElement->nombre);
+        printf("%d -> ", currentElement->threadProperties->idThread);
         currentElement = currentElement->nextElement;
     }
     printf("NULL\n");
+}
+
+void 
+
+/*---------------------------------------------------------MAIN---------------------------------------------------------*/
+
+int main() {
+
+	int *processAllocTable_Quantum=malloc(sizeof(int)*NUMBEROFQUANTUM);
+	
+	int currentQuantum=0,currentQueue=0;
+	struct threadProperties * currentThread;
+
+	queryNbThread();
+
+	struct threadProperties *mainTabStructThreadProperties[numberOfThread];
+	initProcess(mainTabStructThreadProperties);
+
+    initProcessAllocTable(processAllocTable_Quantum);
+
+    struct Queue *queue[NUMBEROFFILESPRIORITY-1];
+    struct Queue *waitForEnterringQueue = malloc(sizeof(*waitForEnterringQueue));
+
+
+    for(int i = 0; i<NUMBEROFFILESPRIORITY ; i++) { queue[i] = malloc(sizeof(*queue));}
+
+    for(int i=0; i<numberOfThread ; i++){
+    	if(mainTabStructThreadProperties[i]->submissionDate == 0){
+    		for(int y=0; y<NUMBEROFFILESPRIORITY ; y++){
+    			if(mainTabStructThreadProperties[i]->priority == y){
+    				insertElement( queue[y] ,mainTabStructThreadProperties[i]);
+    			}
+    		}
+    	}else if(mainTabStructThreadProperties[i]->submissionDate > 0){
+    		mainTabStructThreadProperties[i]->submissionDate--;
+    		insertElement( waitForEnterringQueue ,mainTabStructThreadProperties[i]);
+    	}else{
+    		printf("ERROR : a thread can't enter the queue during initialisation");
+    	}
+    }
+
+    printf("Init_Wainting queue : \n\n");
+    displayQueue(waitForEnterringQueue);
+    for(int i = 0; i<NUMBEROFFILESPRIORITY ; i++){
+    	printf("Queue %hd : \n\n",i);
+    	displayQueue(queue[i]);
+    }
+	/*
+    for(int i=0;i<NUMBEROFQUANTUM;i++){
+    	printf("i : %hd , tab : %hd\n",i,processAllocTable_Quantum[i]);
+    }
+	*/
+    while(currentQuantum!=15){
+    	printf("CURRENT QUANTUM %hd ",currentQuantum);
+    	if(currentQuantum>=NUMBEROFQUANTUM){
+    		currentQuantum=0;
+    	}
+    	currentQueue=processAllocTable_Quantum[currentQuantum];
+    	currentThread = getOldestElement(queue[currentQueue]);
+    	while(currentThread->idThread==-1){//																		PRBLM BOUCLE INFINIE SI PLUS PERSONNES DANS LES FILES
+    		//																							on va a celle d'après suivre la table d'alloc processus ou pas?
+    		free(currentThread);
+    		if(currentQueue<=NUMBEROFFILESPRIORITY-2)currentQueue++;
+    		else currentQueue=0;
+    		currentThread = getOldestElement(queue[currentQueue]);
+    	}
+    	printf("CURRENT QUEUE %hd CURRENT THREAD %hd\n",currentQueue,currentThread->idThread);
+    	
+
+    	mainTabStructThreadProperties[currentThread->idThread]->duration--;
+    	if(mainTabStructThreadProperties[currentThread->idThread]->duration > 0){
+    		if(currentQueue<=NUMBEROFFILESPRIORITY-2)insertElement(queue[currentQueue+1],mainTabStructThreadProperties[currentThread->idThread]);// 	PROVISOIRE NE FCT PAS
+    		else insertElement(queue[0],mainTabStructThreadProperties[currentThread->idThread]);
+    	}else{
+    		printf("THREAD NB %hd IS DELETE\n",currentThread->idThread);
+    		/*
+    		SUP THE THREAD
+    		*/
+    	}
+
+    	/*
+    	rajouter element wainting list
+    	*/
+
+    	
+		/*
+    	for(int i = 0; i<NUMBEROFFILESPRIORITY ; i++){
+    		printf("Queue %hd : \n",i);
+    		displayQueue(queue[i]);
+    	}*/
+    	currentQuantum++;
+    	printf("\n\n");
+    }
+    return 0;
 }
