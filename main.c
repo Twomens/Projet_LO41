@@ -9,13 +9,6 @@
 
 int numberOfThread = 0;
 
-//void queryNbThread(void);
-//void initProcess(struct threadProperties *tabStructThreadProperties[]);
-int * initProcessAllocTable(int processAllocTable_Quantum[]);
-//void insertElement(struct Queue *queue, int nbre);
-//struct threadProperties * getOldestElement(struct Queue *queue);
-
-
 struct threadProperties{
 	int idThread;
 	int submissionDate;
@@ -48,7 +41,7 @@ void *thread(void *arg){
 void queryNbThread(void){
 	srand(time(NULL));
 
-	printf("Please select the number of processus that you want to create : ");
+	printf("Please select the number of thread that you want to create : ");
 	scanf("%d",&numberOfThread);
 	rewind(stdin);
 	while(numberOfThread < 1  || numberOfThread > 10000){//the fact that we use a %d forbid character so if you enter a character you'll get '0'
@@ -187,7 +180,7 @@ struct threadProperties *getOldestElement(struct Queue *queue){
 	}
 	if(queue->firstElement->nextElement ==NULL){
 		Thread=queue->firstElement->threadProperties;
-		printf("Thread nb : %hd\n",queue->firstElement->threadProperties->idThread);
+		printf("Thread executed : %hd\n",queue->firstElement->threadProperties->idThread);
 		queue->firstElement=NULL;
 		free(queue->firstElement);
 		return Thread;
@@ -210,17 +203,16 @@ void displayQueue(struct Queue *queue){
         printf("%d -> ", currentElement->threadProperties->idThread);
         currentElement = currentElement->nextElement;
     }
-    printf("NULL\n");
+    printf("END\n");
 }
 
-void executeWaitingQueue(struct Queue *waitForEnterringQueue,struct Queue *queue[NUMBEROFFILESPRIORITY-1]){ //A FINIR
+void executeWaitingQueue(struct Queue *waitForEnterringQueue,struct Queue *queue[NUMBEROFFILESPRIORITY-1]){ 
 	struct Element *currentElement = waitForEnterringQueue->firstElement;
 	struct Element *pastElement=currentElement;
 
 	if(currentElement == NULL){
-		printf("nobody in waitenterringqueue");
+		printf("Waitenterringqueue is empty");
 	}else if(currentElement->nextElement == NULL && currentElement->threadProperties->submissionDate<=0){
-		printf("lastone");
 		for(int y=0; y<NUMBEROFFILESPRIORITY ; y++){
     		if(currentElement->threadProperties->priority == y){
     			insertElement( queue[y] ,currentElement->threadProperties);
@@ -306,13 +298,14 @@ int main() {
     	printf("Queue %hd : \n\n",i);
     	displayQueue(queue[i]);
     }
+	
 	/*
     for(int i=0;i<NUMBEROFQUANTUM;i++){
     	printf("i : %hd , tab : %hd\n",i,processAllocTable_Quantum[i]);
-    }
-	*/
-    while(currentQuantum!=5){
-    	printf("CURRENT QUANTUM %hd ",currentQuantum);
+    }*/
+	
+    while(currentQuantum!=10){
+    	printf("CURRENT QUANTUM %hd\n",currentQuantum);
     	if(currentQuantum>=NUMBEROFQUANTUM){
     		currentQuantum=0;
     	}
@@ -341,11 +334,11 @@ int main() {
 
     	executeWaitingQueue(waitForEnterringQueue,queue);
     	
-		/*
+		
     	for(int i = 0; i<NUMBEROFFILESPRIORITY ; i++){
     		printf("Queue %hd : \n",i);
     		displayQueue(queue[i]);
-    	}*/
+    	}
     	currentQuantum++;
     	printf("\n\n");
     }
