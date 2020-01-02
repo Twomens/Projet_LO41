@@ -15,6 +15,8 @@ struct threadProperties{
 	int duration;
 	int priority;
 	pthread_t thread;
+	pthread_cond_t condThread;
+	pthread_mutex_t mutexCond;
 };
 
 struct Element{
@@ -29,12 +31,16 @@ struct Queue{
 
 void *thread(void *arg){
 	struct threadProperties *structArg=arg;
+		structArg->condThread=(pthread_cond_t)PTHREAD_COND_INITIALIZER;
+		structArg->mutexCond=(pthread_mutex_t)PTHREAD_MUTEX_INITIALIZER;
 	printf("Je suis le thread n°%hd! subDate : %hd duration : %hd priority : %hd \n",structArg->idThread,structArg->submissionDate,structArg->duration,structArg->priority);
-	
-	/*while(structArg->duration > 0){
-
-	}*/
-
+	while(structArg->duration > 0){
+		pthread_mutex_lock (&structArg->mutexCond);
+		printf("Thread %d s'endort\n",structArg->idThread);
+		pthread_cond_wait (&structArg->condThread,&structArg->mutexCond);
+		printf("Thread %d se réveil\n",structArg->idThread);
+		pthread_mutex_unlock (&structArg->mutexCond);
+	}
 	pthread_exit(NULL);
 }
 
@@ -55,24 +61,25 @@ void queryNbThread(void){
 void initProcess(struct threadProperties *tabStructThreadProperties[]){
 
 	for(int i=0;i<numberOfThread;i++){
-		tabStructThreadProperties[i]=malloc(sizeof(tabStructThreadProperties[i]));
 
+		tabStructThreadProperties[i]=malloc(sizeof(tabStructThreadProperties[i]));
 		tabStructThreadProperties[i]->idThread=i;
 		tabStructThreadProperties[i]->submissionDate=rand() % 3;
 		tabStructThreadProperties[i]->duration=rand() % 11;
 		tabStructThreadProperties[i]->priority=rand() % 11;
-		
+		//tabStructThreadProperties[i]->condThread=(pthread_cond_t)PTHREAD_COND_INITIALIZER;
+		//tabStructThreadProperties[i]->mutexCond=(pthread_mutex_t)PTHREAD_MUTEX_INITIALIZER;
 		if(pthread_create(&tabStructThreadProperties[i]->thread,NULL, thread, tabStructThreadProperties[i])){
 			perror("ERROR ON THREAD_CREATION");
 			//return EXIT_FAILURE;
 		}
-
-		if(pthread_join(tabStructThreadProperties[i]->thread,NULL)){
+		/*if(pthread_join(tabStructThreadProperties[i]->thread,NULL)){
 			perror("ERROR ON THREAD_JOIN");
 			//return EXIT_FAILURE;
-		}
+		}*/
 	}
-	//return EXIT_SUCCESS;
+	printf("\n\n");
+	sleep(1);
 }
 
 int * initProcessAllocTable(int processAllocTable_Quantum []){
@@ -211,7 +218,7 @@ void executeWaitingQueue(struct Queue *waitForEnterringQueue,struct Queue *queue
 	struct Element *pastElement=currentElement;
 
 	if(currentElement == NULL){
-		printf("Waitenterringqueue is empty");
+		printf("Waitenteringqueue is empty");
 	}else if(currentElement->nextElement == NULL && currentElement->threadProperties->submissionDate<=0){
 		for(int y=0; y<NUMBEROFFILESPRIORITY ; y++){
     		if(currentElement->threadProperties->priority == y){
@@ -258,7 +265,6 @@ void executeWaitingQueue(struct Queue *waitForEnterringQueue,struct Queue *queue
 /*---------------------------------------------------------MAIN---------------------------------------------------------*/
 
 int main() {
-
 	int *processAllocTable_Quantum=malloc(sizeof(int)*NUMBEROFQUANTUM);
 	
 	int currentQuantum=0,currentQueue=0;
@@ -267,6 +273,7 @@ int main() {
 	queryNbThread();
 
 	struct threadProperties *mainTabStructThreadProperties[numberOfThread];
+	
 	initProcess(mainTabStructThreadProperties);
 
     initProcessAllocTable(processAllocTable_Quantum);
@@ -322,6 +329,9 @@ int main() {
     	
 
     	mainTabStructThreadProperties[currentThread->idThread]->duration--;
+    	printf("LE THREAD VA ETRE REVEILLE\n");
+    	pthread_cond_signal(&currentThread->condThread);
+    	sleep(2);
     	if(mainTabStructThreadProperties[currentThread->idThread]->duration > 0){
     		if(currentQueue<=NUMBEROFFILESPRIORITY-2)insertElement(queue[currentQueue+1],mainTabStructThreadProperties[currentThread->idThread]);// 	PROVISOIRE NE FCT PAS
     		else insertElement(queue[0],mainTabStructThreadProperties[currentThread->idThread]);
@@ -333,7 +343,6 @@ int main() {
     	}
 
     	executeWaitingQueue(waitForEnterringQueue,queue);
-    	
 		
     	for(int i = 0; i<NUMBEROFFILESPRIORITY ; i++){
     		printf("Queue %hd : \n",i);
@@ -344,3 +353,14 @@ int main() {
     }
     return 0;
 }
+
+//reste à faire : 
+//trouver un oyen d'enlver l'attente active avec le sleep (au pire avec un flag que deverouille le thread sous protection mutex)
+//regarder s'ils sont supprimés ( zone de suppression dans le main mais à priori thread se tue tout seul)
+//corriger le prblm de la boucle infini si plus personne dans les files 
+
+
+//optionnel ajouter des threads sur signal
+//ajouter mutex pour protéger
+//regarder l'intérêt de 1 mutex 1 cond par thread
+//faire le main dans un processus
