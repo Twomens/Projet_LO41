@@ -7,7 +7,8 @@
 #define NUMBEROFQUANTUM 100
 #define NUMBEROFFILESPRIORITY 11
 
-int numberOfThread = 0;
+int numberOfThread = 0,threadBusy = 0;
+pthread_mutex_t mutexThreadBusy = PTHREAD_MUTEX_INITIALIZER;
 
 struct threadProperties{
 	int idThread;
@@ -40,7 +41,12 @@ void *thread(void *arg){
 		pthread_cond_wait (&structArg->condThread,&structArg->mutexCond);
 		printf("Thread %d se réveil\n",structArg->idThread);
 		pthread_mutex_unlock (&structArg->mutexCond);
+		sleep(1);
+		pthread_mutex_lock(&mutexThreadBusy);
+		threadBusy=0;
+		pthread_mutex_unlock(&mutexThreadBusy);
 	}
+	printf("LE THREAD SE DETRUIT\n");
 	pthread_exit(NULL);
 }
 
@@ -65,7 +71,7 @@ void initProcess(struct threadProperties *tabStructThreadProperties[]){
 		tabStructThreadProperties[i]=malloc(sizeof(tabStructThreadProperties[i]));
 		tabStructThreadProperties[i]->idThread=i;
 		tabStructThreadProperties[i]->submissionDate=rand() % 3;
-		tabStructThreadProperties[i]->duration=rand() % 11;
+		tabStructThreadProperties[i]->duration=(rand() % 10)+1;
 		tabStructThreadProperties[i]->priority=rand() % 11;
 		//tabStructThreadProperties[i]->condThread=(pthread_cond_t)PTHREAD_COND_INITIALIZER;
 		//tabStructThreadProperties[i]->mutexCond=(pthread_mutex_t)PTHREAD_MUTEX_INITIALIZER;
@@ -129,8 +135,10 @@ int * initProcessAllocTable(int processAllocTable_Quantum []){
 				}
 				percentageRemaining=100;
 				printf("Again ? [y/n]");
-				scanf("%c",&inputChar);//same problem--------------------------------------------------------------------------
+				//inputChar=getchar();
+				scanf("test %c",&inputChar);//-------------------------------------------------------------------------- on part dans le néant ici | non bloquant ca depend
 				scanf("%c",&inputChar);
+				printf("here");
 			}while(inputChar!='n');
 
 		}else if(inputChar=='m'){
@@ -151,7 +159,7 @@ int * initProcessAllocTable(int processAllocTable_Quantum []){
 		}
 	}
 	cptFilePriority=0;
-	for(int i=0;i<NUMBEROFQUANTUM;i++){//-------------------------------------------------------------------problem only work with a hundred quantum and deleate the tab CPU_percentage
+	for(int i=0;i<NUMBEROFQUANTUM;i++){//-------------------------------------------------------------------problem only work with a hundred quantum and delete the tab CPU_percentage
 		while(processAllocTable_Percentage[1][cptFilePriority] == 0){//if you don't have anymore value in the tab cpu
 			if(cptFilePriority>=NUMBEROFFILESPRIORITY-1) cptFilePriority=0;//to avoid outpassing the max value of list
 			else cptFilePriority++;//if you don't ahve anymore quantum remaining in this file you skip it
@@ -267,7 +275,7 @@ void executeWaitingQueue(struct Queue *waitForEnterringQueue,struct Queue *queue
 int main() {
 	int *processAllocTable_Quantum=malloc(sizeof(int)*NUMBEROFQUANTUM);
 	
-	int currentQuantum=0,currentQueue=0;
+	int currentQuantum=0,currentQueue=0,cptQueue=0;
 	struct threadProperties * currentThread;
 
 	queryNbThread();
@@ -311,27 +319,45 @@ int main() {
     	printf("i : %hd , tab : %hd\n",i,processAllocTable_Quantum[i]);
     }*/
 	
-    while(currentQuantum!=10){
+    while(currentQuantum!=20){
     	printf("CURRENT QUANTUM %hd\n",currentQuantum);
     	if(currentQuantum>=NUMBEROFQUANTUM){
     		currentQuantum=0;
     	}
     	currentQueue=processAllocTable_Quantum[currentQuantum];
     	currentThread = getOldestElement(queue[currentQueue]);
-    	while(currentThread->idThread==-1){//																		PRBLM BOUCLE INFINIE SI PLUS PERSONNES DANS LES FILES
+    	while(currentThread->idThread==-1 && cptQueue<NUMBEROFFILESPRIORITY-1){//																		PRBLM BOUCLE INFINIE SI PLUS PERSONNES DANS LES FILES
     		//																							on va a celle d'après suivre la table d'alloc processus ou pas?
+    		cptQueue++;
     		free(currentThread);
     		if(currentQueue<=NUMBEROFFILESPRIORITY-2)currentQueue++;
     		else currentQueue=0;
     		currentThread = getOldestElement(queue[currentQueue]);
     	}
+    	if(cptQueue>=NUMBEROFFILESPRIORITY-1){
+    		printf("Nobody is remaining in queues\n");
+    		currentQuantum++;
+	    	executeWaitingQueue(waitForEnterringQueue,queue);
+    		cptQueue=0;
+    		continue;
+    	}
+    	cptQueue=0;
     	printf("CURRENT QUEUE %hd CURRENT THREAD %hd\n",currentQueue,currentThread->idThread);
     	
 
     	mainTabStructThreadProperties[currentThread->idThread]->duration--;
     	printf("LE THREAD VA ETRE REVEILLE\n");
+
+    	pthread_mutex_lock(&mutexThreadBusy);
+    	threadBusy=1;
+    	pthread_mutex_unlock(&mutexThreadBusy);
+
+    	pthread_mutex_lock(&currentThread->mutexCond);
     	pthread_cond_signal(&currentThread->condThread);
-    	sleep(2);
+    	pthread_mutex_unlock(&currentThread->mutexCond);
+
+    	while(threadBusy==1);
+
     	if(mainTabStructThreadProperties[currentThread->idThread]->duration > 0){
     		if(currentQueue<=NUMBEROFFILESPRIORITY-2)insertElement(queue[currentQueue+1],mainTabStructThreadProperties[currentThread->idThread]);// 	PROVISOIRE NE FCT PAS
     		else insertElement(queue[0],mainTabStructThreadProperties[currentThread->idThread]);
@@ -354,13 +380,8 @@ int main() {
     return 0;
 }
 
-//reste à faire : 
-//trouver un oyen d'enlver l'attente active avec le sleep (au pire avec un flag que deverouille le thread sous protection mutex)
-//regarder s'ils sont supprimés ( zone de suppression dans le main mais à priori thread se tue tout seul)
-//corriger le prblm de la boucle infini si plus personne dans les files 
-
 
 //optionnel ajouter des threads sur signal
-//ajouter mutex pour protéger
+//ajouter mutex pour protéger ??
 //regarder l'intérêt de 1 mutex 1 cond par thread
 //faire le main dans un processus
