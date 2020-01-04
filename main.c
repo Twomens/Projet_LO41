@@ -372,14 +372,14 @@ int main() {
     	printf("i : %hd , tab : %hd\n",i,processAllocTable_Quantum[i]);
     }*/
 	
-    while(currentQuantum!=20){
+    while(currentQuantum!=25){
     	printf("CURRENT QUANTUM %hd\n",currentQuantum);
     	if(currentQuantum>=NUMBEROFQUANTUM){
     		currentQuantum=0;
     	}
     	currentQueue=processAllocTable_Quantum[currentQuantum];
     	currentThread = getOldestElement(queue[currentQueue]);
-    	while(currentThread->idThread==-1 && cptQueue<NUMBEROFFILESPRIORITY-1){//																		PRBLM BOUCLE INFINIE SI PLUS PERSONNES DANS LES FILES
+    	while(currentThread->idThread==-1 && cptQueue<NUMBEROFFILESPRIORITY-1){
     		//																							on va a celle d'après suivre la table d'alloc processus ou pas?
     		cptQueue++;
     		free(currentThread);
@@ -416,10 +416,7 @@ int main() {
     		else insertElement(queue[0],mainTabStructThreadProperties[currentThread->idThread]);
     	}else{
     		printf("THREAD NB %hd IS DELETE\n",currentThread->idThread);
-    		/*
-    		SUP THE THREAD
-    		*/
-    	}
+       	}
 
     	executeWaitingQueue(waitForEnterringQueue,queue);
 		
@@ -435,6 +432,5 @@ int main() {
 
 
 //optionnel ajouter des threads sur signal
-//ajouter mutex pour protéger ??
 //regarder l'intérêt de 1 mutex 1 cond par thread
 //faire le main dans un processus
