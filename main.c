@@ -65,24 +65,66 @@ void queryNbThread(void){
 }
 
 void initProcess(struct threadProperties *tabStructThreadProperties[]){
+	if(numberOfThread!=7){
+		for(int i=0;i<numberOfThread;i++){
 
-	for(int i=0;i<numberOfThread;i++){
-
-		tabStructThreadProperties[i]=malloc(sizeof(tabStructThreadProperties[i]));
-		tabStructThreadProperties[i]->idThread=i;
-		tabStructThreadProperties[i]->submissionDate=rand() % 3;
-		tabStructThreadProperties[i]->duration=(rand() % 10)+1;
-		tabStructThreadProperties[i]->priority=rand() % 11;
-		//tabStructThreadProperties[i]->condThread=(pthread_cond_t)PTHREAD_COND_INITIALIZER;
-		//tabStructThreadProperties[i]->mutexCond=(pthread_mutex_t)PTHREAD_MUTEX_INITIALIZER;
-		if(pthread_create(&tabStructThreadProperties[i]->thread,NULL, thread, tabStructThreadProperties[i])){
-			perror("ERROR ON THREAD_CREATION");
-			//return EXIT_FAILURE;
+			tabStructThreadProperties[i]=malloc(sizeof(tabStructThreadProperties[i]));
+			tabStructThreadProperties[i]->idThread=i;
+			tabStructThreadProperties[i]->submissionDate=rand() % 3;
+			tabStructThreadProperties[i]->duration=(rand() % 10)+1;
+			tabStructThreadProperties[i]->priority=rand() % NUMBEROFFILESPRIORITY;
+			//tabStructThreadProperties[i]->condThread=(pthread_cond_t)PTHREAD_COND_INITIALIZER;
+			//tabStructThreadProperties[i]->mutexCond=(pthread_mutex_t)PTHREAD_MUTEX_INITIALIZER;
+			if(pthread_create(&tabStructThreadProperties[i]->thread,NULL, thread, tabStructThreadProperties[i])){
+				perror("ERROR ON THREAD_CREATION");
+				//return EXIT_FAILURE;
+			}
+			/*if(pthread_join(tabStructThreadProperties[i]->thread,NULL)){
+				perror("ERROR ON THREAD_JOIN");
+				//return EXIT_FAILURE;
+			}*/
 		}
-		/*if(pthread_join(tabStructThreadProperties[i]->thread,NULL)){
-			perror("ERROR ON THREAD_JOIN");
-			//return EXIT_FAILURE;
-		}*/
+	}else{//easter egg jeu de data du cours
+		for(int i=0;i<numberOfThread;i++){
+
+			tabStructThreadProperties[i]=malloc(sizeof(tabStructThreadProperties[i]));
+			tabStructThreadProperties[i]->idThread=i;
+			
+		//}
+		if(i==0){
+			tabStructThreadProperties[0]->submissionDate=0;
+			tabStructThreadProperties[0]->duration=7;
+			tabStructThreadProperties[0]->priority=0;
+		}else if (i==1){
+			tabStructThreadProperties[1]->submissionDate=0;
+			tabStructThreadProperties[1]->duration=4;
+			tabStructThreadProperties[1]->priority=1;
+		}else if(i==2){
+			tabStructThreadProperties[2]->submissionDate=1;
+			tabStructThreadProperties[2]->duration=6;
+			tabStructThreadProperties[2]->priority=1;
+		}else if(i==3){
+			tabStructThreadProperties[3]->submissionDate=2;
+			tabStructThreadProperties[3]->duration=1;
+			tabStructThreadProperties[3]->priority=2;
+		}else if(i==4){
+			tabStructThreadProperties[4]->submissionDate=1;
+			tabStructThreadProperties[4]->duration=2;
+			tabStructThreadProperties[4]->priority=3;
+		}else if(i==5){
+			tabStructThreadProperties[5]->submissionDate=1;
+			tabStructThreadProperties[5]->duration=4;
+			tabStructThreadProperties[5]->priority=0;
+		}else if(i==6){
+			tabStructThreadProperties[6]->submissionDate=2;
+			tabStructThreadProperties[6]->duration=1;
+			tabStructThreadProperties[6]->priority=2;
+		}
+		/*for(int i=0;i<numberOfThread;i++){*/
+			if(pthread_create(&tabStructThreadProperties[i]->thread,NULL, thread, tabStructThreadProperties[i])){
+				perror("ERROR ON THREAD_CREATION");
+			}
+		}
 	}
 	printf("\n\n");
 	sleep(1);
@@ -97,6 +139,15 @@ int * initProcessAllocTable(int processAllocTable_Quantum []){
 	char inputChar='0';
 
 	srand(time(NULL));
+
+	//easter egg suite
+	if(numberOfThread==7){
+		for(int i=0;i<NUMBEROFFILESPRIORITY;i++)setOfValue[i]=0;
+		setOfValue[0]=40;
+		setOfValue[1]=30;
+		setOfValue[2]=20;
+		setOfValue[3]=10;
+	} 
 
 	printf("Allocation Table Process :\n\nYou have 0 to 10 priority levels\nHere is the basic distribution :\n");
 	printf("(Format : priority-percentage of time allocated tab)\n");
@@ -296,10 +347,12 @@ int main() {
     	if(mainTabStructThreadProperties[i]->submissionDate == 0){
     		for(int y=0; y<NUMBEROFFILESPRIORITY ; y++){
     			if(mainTabStructThreadProperties[i]->priority == y){
+    				printf("here %d-%d ",i,mainTabStructThreadProperties[i]->idThread);
     				insertElement( queue[y] ,mainTabStructThreadProperties[i]);
     			}
     		}
     	}else if(mainTabStructThreadProperties[i]->submissionDate > 0){
+    		printf("HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
     		mainTabStructThreadProperties[i]->submissionDate--;
     		insertElement( waitForEnterringQueue ,mainTabStructThreadProperties[i]);
     	}else{
@@ -356,7 +409,7 @@ int main() {
     	pthread_cond_signal(&currentThread->condThread);
     	pthread_mutex_unlock(&currentThread->mutexCond);
 
-    	while(threadBusy==1);
+    	while(threadBusy==1);//à protéger ??
 
     	if(mainTabStructThreadProperties[currentThread->idThread]->duration > 0){
     		if(currentQueue<=NUMBEROFFILESPRIORITY-2)insertElement(queue[currentQueue+1],mainTabStructThreadProperties[currentThread->idThread]);// 	PROVISOIRE NE FCT PAS

@@ -1,0 +1,1008 @@
+twomens@twomens-VirtualBox:~/Desktop/Projet_LO41$ ./main
+Please select the number of thread that you want to create : 4
+
+
+Je suis le thread n°3! subDate : 1 duration : 1 priority : 0 
+Thread 3 s'endort
+Je suis le thread n°2! subDate : 0 duration : 1 priority : 4 
+Thread 2 s'endort
+Je suis le thread n°1! subDate : 2 duration : 3 priority : 1 
+Thread 1 s'endort
+Je suis le thread n°0! subDate : 2 duration : 6 priority : 10 
+Thread 0 s'endort
+Allocation Table Process :
+
+You have 0 to 10 priority levels
+Here is the basic distribution :
+(Format : priority-percentage of time allocated tab)
+0-26%	1-20%	2-15%	3-10%	4-8%	5-6%	6-5%	7-4%	8-3%	9-2%	10-1%	
+If you want to change the set of value tap 'y' either tap 'n'
+Invalid input type 'y' for yes or 'n' for no : n
+
+
+YOUR SET OF VALUES HAS BEEN CORRECTLY SETTlED
+
+HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEHEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEhere 2-2 HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEInit_Wainting queue : 
+
+3 -> 1 -> 0 -> END
+Queue 0 : 
+
+END
+Queue 1 : 
+
+END
+Queue 2 : 
+
+END
+Queue 3 : 
+
+END
+Queue 4 : 
+
+2 -> END
+Queue 5 : 
+
+END
+Queue 6 : 
+
+END
+Queue 7 : 
+
+END
+Queue 8 : 
+
+END
+Queue 9 : 
+
+END
+Queue 10 : 
+
+END
+CURRENT QUANTUM 0
+nobody
+nobody
+nobody
+nobody
+Thread executed : 2
+CURRENT QUEUE 4 CURRENT THREAD 2
+LE THREAD VA ETRE REVEILLE
+Thread 2 se réveil
+LE THREAD SE DETRUIT
+THREAD NB 2 IS DELETE
+
+ 3 is sup_ 
+1 -> 0 -> END
+Queue 0 : 
+3 -> END
+Queue 1 : 
+END
+Queue 2 : 
+END
+Queue 3 : 
+END
+Queue 4 : 
+END
+Queue 5 : 
+END
+Queue 6 : 
+END
+Queue 7 : 
+END
+Queue 8 : 
+END
+Queue 9 : 
+END
+Queue 10 : 
+END
+
+
+CURRENT QUANTUM 1
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+Thread executed : 3
+Nobody is remaining in queues
+
+ 1 is sup_ 
+
+ 0 is sup 
+END
+CURRENT QUANTUM 2
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+Thread executed : 0
+CURRENT QUEUE 10 CURRENT THREAD 0
+LE THREAD VA ETRE REVEILLE
+Thread 0 se réveil
+Thread 0 s'endort
+Waitenteringqueue is emptyEND
+Queue 0 : 
+0 -> END
+Queue 1 : 
+1 -> END
+Queue 2 : 
+END
+Queue 3 : 
+END
+Queue 4 : 
+END
+Queue 5 : 
+END
+Queue 6 : 
+END
+Queue 7 : 
+END
+Queue 8 : 
+END
+Queue 9 : 
+END
+Queue 10 : 
+END
+
+
+CURRENT QUANTUM 3
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+Thread executed : 0
+CURRENT QUEUE 0 CURRENT THREAD 0
+LE THREAD VA ETRE REVEILLE
+Thread 0 se réveil
+Thread 0 s'endort
+Waitenteringqueue is emptyEND
+Queue 0 : 
+END
+Queue 1 : 
+0 -> 1 -> END
+Queue 2 : 
+END
+Queue 3 : 
+END
+Queue 4 : 
+END
+Queue 5 : 
+END
+Queue 6 : 
+END
+Queue 7 : 
+END
+Queue 8 : 
+END
+Queue 9 : 
+END
+Queue 10 : 
+END
+
+
+CURRENT QUANTUM 4
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+Thread nb : 1
+CURRENT QUEUE 1 CURRENT THREAD 1
+LE THREAD VA ETRE REVEILLE
+Thread 1 se réveil
+Thread 1 s'endort
+Waitenteringqueue is emptyEND
+Queue 0 : 
+END
+Queue 1 : 
+0 -> END
+Queue 2 : 
+1 -> END
+Queue 3 : 
+END
+Queue 4 : 
+END
+Queue 5 : 
+END
+Queue 6 : 
+END
+Queue 7 : 
+END
+Queue 8 : 
+END
+Queue 9 : 
+END
+Queue 10 : 
+END
+
+
+CURRENT QUANTUM 5
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+Thread executed : 0
+CURRENT QUEUE 1 CURRENT THREAD 0
+LE THREAD VA ETRE REVEILLE
+Thread 0 se réveil
+Thread 0 s'endort
+Waitenteringqueue is emptyEND
+Queue 0 : 
+END
+Queue 1 : 
+END
+Queue 2 : 
+0 -> 1 -> END
+Queue 3 : 
+END
+Queue 4 : 
+END
+Queue 5 : 
+END
+Queue 6 : 
+END
+Queue 7 : 
+END
+Queue 8 : 
+END
+Queue 9 : 
+END
+Queue 10 : 
+END
+
+
+CURRENT QUANTUM 6
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+Thread nb : 1
+CURRENT QUEUE 2 CURRENT THREAD 1
+LE THREAD VA ETRE REVEILLE
+Thread 1 se réveil
+Thread 1 s'endort
+Waitenteringqueue is emptyEND
+Queue 0 : 
+END
+Queue 1 : 
+END
+Queue 2 : 
+0 -> END
+Queue 3 : 
+1 -> END
+Queue 4 : 
+END
+Queue 5 : 
+END
+Queue 6 : 
+END
+Queue 7 : 
+END
+Queue 8 : 
+END
+Queue 9 : 
+END
+Queue 10 : 
+END
+
+
+CURRENT QUANTUM 7
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+Thread executed : 0
+CURRENT QUEUE 2 CURRENT THREAD 0
+LE THREAD VA ETRE REVEILLE
+Thread 0 se réveil
+Thread 0 s'endort
+Waitenteringqueue is emptyEND
+Queue 0 : 
+END
+Queue 1 : 
+END
+Queue 2 : 
+END
+Queue 3 : 
+0 -> 1 -> END
+Queue 4 : 
+END
+Queue 5 : 
+END
+Queue 6 : 
+END
+Queue 7 : 
+END
+Queue 8 : 
+END
+Queue 9 : 
+END
+Queue 10 : 
+END
+
+
+CURRENT QUANTUM 8
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+Thread nb : 1
+CURRENT QUEUE 3 CURRENT THREAD 1
+LE THREAD VA ETRE REVEILLE
+Thread 1 se réveil
+LE THREAD SE DETRUIT
+THREAD NB 1 IS DELETE
+Waitenteringqueue is emptyEND
+Queue 0 : 
+END
+Queue 1 : 
+END
+Queue 2 : 
+END
+Queue 3 : 
+0 -> END
+Queue 4 : 
+END
+Queue 5 : 
+END
+Queue 6 : 
+END
+Queue 7 : 
+END
+Queue 8 : 
+END
+Queue 9 : 
+END
+Queue 10 : 
+END
+
+
+CURRENT QUANTUM 9
+nobody
+nobody
+nobody
+nobody
+nobody
+Thread executed : 0
+CURRENT QUEUE 3 CURRENT THREAD 0
+LE THREAD VA ETRE REVEILLE
+Thread 0 se réveil
+Thread 0 s'endort
+Waitenteringqueue is emptyEND
+Queue 0 : 
+END
+Queue 1 : 
+END
+Queue 2 : 
+END
+Queue 3 : 
+END
+Queue 4 : 
+0 -> END
+Queue 5 : 
+END
+Queue 6 : 
+END
+Queue 7 : 
+END
+Queue 8 : 
+END
+Queue 9 : 
+END
+Queue 10 : 
+END
+
+
+CURRENT QUANTUM 10
+nobody
+nobody
+nobody
+nobody
+Thread executed : 0
+CURRENT QUEUE 4 CURRENT THREAD 0
+LE THREAD VA ETRE REVEILLE
+Thread 0 se réveil
+LE THREAD SE DETRUIT
+THREAD NB 0 IS DELETE
+Waitenteringqueue is emptyEND
+Queue 0 : 
+END
+Queue 1 : 
+END
+Queue 2 : 
+END
+Queue 3 : 
+END
+Queue 4 : 
+END
+Queue 5 : 
+END
+Queue 6 : 
+END
+Queue 7 : 
+END
+Queue 8 : 
+END
+Queue 9 : 
+END
+Queue 10 : 
+END
+
+
+CURRENT QUANTUM 11
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+Nobody is remaining in queues
+Waitenteringqueue is emptyEND
+CURRENT QUANTUM 12
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+Nobody is remaining in queues
+Waitenteringqueue is emptyEND
+CURRENT QUANTUM 13
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+Nobody is remaining in queues
+Waitenteringqueue is emptyEND
+CURRENT QUANTUM 14
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+Nobody is remaining in queues
+Waitenteringqueue is emptyEND
+CURRENT QUANTUM 15
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+Nobody is remaining in queues
+Waitenteringqueue is emptyEND
+CURRENT QUANTUM 16
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+Nobody is remaining in queues
+Waitenteringqueue is emptyEND
+CURRENT QUANTUM 17
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+Nobody is remaining in queues
+Waitenteringqueue is emptyEND
+CURRENT QUANTUM 18
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+Nobody is remaining in queues
+Waitenteringqueue is emptyEND
+CURRENT QUANTUM 19
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+nobody
+Nobody is remaining in queues
+Waitenteringqueue is emptyEND
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Please select the number of thread that you want to create : 7
+
+
+Je suis le thread n°6! subDate : 2 duration : 1 priority : 2 
+Thread 6 s'endort
+Je suis le thread n°5! subDate : 1 duration : 4 priority : 0 
+Thread 5 s'endort
+Je suis le thread n°4! subDate : 1 duration : 2 priority : 3 
+Thread 4 s'endort
+Je suis le thread n°3! subDate : 2 duration : 1 priority : 2 
+Thread 3 s'endort
+Je suis le thread n°2! subDate : 1 duration : 6 priority : 1 
+Thread 2 s'endort
+Je suis le thread n°1! subDate : 0 duration : 4 priority : 1 
+Thread 1 s'endort
+Je suis le thread n°0! subDate : 0 duration : 7 priority : 0 
+Thread 0 s'endort
+Allocation Table Process :
+
+You have 0 to 10 priority levels
+Here is the basic distribution :
+(Format : priority-percentage of time allocated tab)
+0-40%	1-30%	2-20%	3-10%	
+If you want to change the set of value tap 'y' either tap 'n'
+Invalid input type 'y' for yes or 'n' for no : n
+
+
+YOUR SET OF VALUES HAS BEEN CORRECTLY SETTlED
+
+here 0-0 here 1-1 HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEHEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEHEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEHEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEHEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEInit_Wainting queue : 
+
+6 -> 5 -> 4 -> 3 -> 2 -> END
+Queue 0 : 
+
+0 -> END
+Queue 1 : 
+
+1 -> END
+Queue 2 : 
+
+END
+Queue 3 : 
+
+END
+CURRENT QUANTUM 0
+Thread executed : 0
+CURRENT QUEUE 0 CURRENT THREAD 0
+LE THREAD VA ETRE REVEILLE
+Thread 0 se réveil
+Thread 0 s'endort
+
+ 5 is sup 
+
+ 4 is sup 
+
+ 2 is sup 
+6 -> 3 -> END
+Queue 0 : 
+5 -> END
+Queue 1 : 
+2 -> 0 -> 1 -> END
+Queue 2 : 
+END
+Queue 3 : 
+4 -> END
+
+
+CURRENT QUANTUM 1
+Thread nb : 1
+CURRENT QUEUE 1 CURRENT THREAD 1
+LE THREAD VA ETRE REVEILLE
+Thread 1 se réveil
+Thread 1 s'endort
+
+ 6 is sup_ 
+
+ 3 is sup 
+END
+Queue 0 : 
+5 -> END
+Queue 1 : 
+2 -> 0 -> END
+Queue 2 : 
+3 -> 6 -> 1 -> END
+Queue 3 : 
+4 -> END
+
+
+CURRENT QUANTUM 2
+Thread nb : 1
+CURRENT QUEUE 2 CURRENT THREAD 1
+LE THREAD VA ETRE REVEILLE
+Thread 1 se réveil
+Thread 1 s'endort
+Waitenteringqueue is emptyEND
+Queue 0 : 
+5 -> END
+Queue 1 : 
+2 -> 0 -> END
+Queue 2 : 
+3 -> 6 -> END
+Queue 3 : 
+1 -> 4 -> END
+
+
+CURRENT QUANTUM 3
+Thread executed : 5
+CURRENT QUEUE 0 CURRENT THREAD 5
+LE THREAD VA ETRE REVEILLE
+Thread 5 se réveil
+Thread 5 s'endort
+Waitenteringqueue is emptyEND
+Queue 0 : 
+END
+Queue 1 : 
+5 -> 2 -> 0 -> END
+Queue 2 : 
+3 -> 6 -> END
+Queue 3 : 
+1 -> 4 -> END
+
+
+CURRENT QUANTUM 4
+Thread nb : 0
+CURRENT QUEUE 1 CURRENT THREAD 0
+LE THREAD VA ETRE REVEILLE
+Thread 0 se réveil
+Thread 0 s'endort
+Waitenteringqueue is emptyEND
+Queue 0 : 
+END
+Queue 1 : 
+5 -> 2 -> END
+Queue 2 : 
+0 -> 3 -> 6 -> END
+Queue 3 : 
+1 -> 4 -> END
+
+
+CURRENT QUANTUM 5
+Thread nb : 6
+CURRENT QUEUE 2 CURRENT THREAD 6
+LE THREAD VA ETRE REVEILLE
+Thread 6 se réveil
+LE THREAD SE DETRUIT
+THREAD NB 6 IS DELETE
+Waitenteringqueue is emptyEND
+Queue 0 : 
+END
+Queue 1 : 
+5 -> 2 -> END
+Queue 2 : 
+0 -> 3 -> END
+Queue 3 : 
+1 -> 4 -> END
+
+
+CURRENT QUANTUM 6
+nobody
+Thread nb : 2
+CURRENT QUEUE 1 CURRENT THREAD 2
+LE THREAD VA ETRE REVEILLE
+Thread 2 se réveil
+Thread 2 s'endort
+Waitenteringqueue is emptyEND
+Queue 0 : 
+END
+Queue 1 : 
+5 -> END
+Queue 2 : 
+2 -> 0 -> 3 -> END
+Queue 3 : 
+1 -> 4 -> END
+
+
+CURRENT QUANTUM 7
+Thread executed : 5
+CURRENT QUEUE 1 CURRENT THREAD 5
+LE THREAD VA ETRE REVEILLE
+Thread 5 se réveil
+Thread 5 s'endort
+Waitenteringqueue is emptyEND
+Queue 0 : 
+END
+Queue 1 : 
+END
+Queue 2 : 
+5 -> 2 -> 0 -> 3 -> END
+Queue 3 : 
+1 -> 4 -> END
+
+
+CURRENT QUANTUM 8
+Thread nb : 3
+CURRENT QUEUE 2 CURRENT THREAD 3
+LE THREAD VA ETRE REVEILLE
+Thread 3 se réveil
+LE THREAD SE DETRUIT
+THREAD NB 3 IS DELETE
+Waitenteringqueue is emptyEND
+Queue 0 : 
+END
+Queue 1 : 
+END
+Queue 2 : 
+5 -> 2 -> 0 -> END
+Queue 3 : 
+1 -> 4 -> END
+
+
+CURRENT QUANTUM 9
+nobody
+nobody
+Thread nb : 0
+CURRENT QUEUE 2 CURRENT THREAD 0
+LE THREAD VA ETRE REVEILLE
+Thread 0 se réveil
+Thread 0 s'endort
+Waitenteringqueue is emptyEND
+Queue 0 : 
+END
+Queue 1 : 
+END
+Queue 2 : 
+5 -> 2 -> END
+Queue 3 : 
+0 -> 1 -> 4 -> END
+
+
+CURRENT QUANTUM 10
+nobody
+Thread nb : 2
+CURRENT QUEUE 2 CURRENT THREAD 2
+LE THREAD VA ETRE REVEILLE
+Thread 2 se réveil
+Thread 2 s'endort
+Waitenteringqueue is emptyEND
+Queue 0 : 
+END
+Queue 1 : 
+END
+Queue 2 : 
+5 -> END
+Queue 3 : 
+2 -> 0 -> 1 -> 4 -> END
+
+
+CURRENT QUANTUM 11
+Thread executed : 5
+CURRENT QUEUE 2 CURRENT THREAD 5
+LE THREAD VA ETRE REVEILLE
+Thread 5 se réveil
+Thread 5 s'endort
+Waitenteringqueue is emptyEND
+Queue 0 : 
+END
+Queue 1 : 
+END
+Queue 2 : 
+END
+Queue 3 : 
+5 -> 2 -> 0 -> 1 -> 4 -> END
+
+
+CURRENT QUANTUM 12
+nobody
+nobody
+nobody
+Thread nb : 4
+Nobody is remaining in queues
+Waitenteringqueue is emptyEND
+CURRENT QUANTUM 13
+nobody
+nobody
+Thread nb : 1
+CURRENT QUEUE 3 CURRENT THREAD 1
+LE THREAD VA ETRE REVEILLE
+Thread 1 se réveil
+Thread 1 s'endort
+Waitenteringqueue is emptyEND
+Queue 0 : 
+1 -> END
+Queue 1 : 
+END
+Queue 2 : 
+END
+Queue 3 : 
+5 -> 2 -> 0 -> END
+
+
+CURRENT QUANTUM 14
+nobody
+Thread nb : 0
+CURRENT QUEUE 3 CURRENT THREAD 0
+LE THREAD VA ETRE REVEILLE
+Thread 0 se réveil
+Thread 0 s'endort
+Waitenteringqueue is emptyEND
+Queue 0 : 
+0 -> 1 -> END
+Queue 1 : 
+END
+Queue 2 : 
+END
+Queue 3 : 
+5 -> 2 -> END
+
+
+CURRENT QUANTUM 15
+Thread nb : 1
+CURRENT QUEUE 0 CURRENT THREAD 1
+LE THREAD VA ETRE REVEILLE
+Thread 1 se réveil
+LE THREAD SE DETRUIT
+THREAD NB 1 IS DELETE
+Waitenteringqueue is emptyEND
+Queue 0 : 
+0 -> END
+Queue 1 : 
+END
+Queue 2 : 
+END
+Queue 3 : 
+5 -> 2 -> END
+
+
+CURRENT QUANTUM 16
+nobody
+nobody
+Thread nb : 2
+CURRENT QUEUE 3 CURRENT THREAD 2
+LE THREAD VA ETRE REVEILLE
+Thread 2 se réveil
+Thread 2 s'endort
+Waitenteringqueue is emptyEND
+Queue 0 : 
+2 -> 0 -> END
+Queue 1 : 
+END
+Queue 2 : 
+END
+Queue 3 : 
+5 -> END
+
+
+CURRENT QUANTUM 17
+nobody
+Thread executed : 5
+CURRENT QUEUE 3 CURRENT THREAD 5
+LE THREAD VA ETRE REVEILLE
+Thread 5 se réveil
+LE THREAD SE DETRUIT
+THREAD NB 5 IS DELETE
+Waitenteringqueue is emptyEND
+Queue 0 : 
+2 -> 0 -> END
+Queue 1 : 
+END
+Queue 2 : 
+END
+Queue 3 : 
+END
+
+
+CURRENT QUANTUM 18
+Thread nb : 0
+CURRENT QUEUE 0 CURRENT THREAD 0
+LE THREAD VA ETRE REVEILLE
+Thread 0 se réveil
+Thread 0 s'endort
+Waitenteringqueue is emptyEND
+Queue 0 : 
+2 -> END
+Queue 1 : 
+0 -> END
+Queue 2 : 
+END
+Queue 3 : 
+END
+
+
+CURRENT QUANTUM 19
+Thread executed : 0
+CURRENT QUEUE 1 CURRENT THREAD 0
+LE THREAD VA ETRE REVEILLE
+Thread 0 se réveil
+Thread 0 s'endort
+Waitenteringqueue is emptyEND
+Queue 0 : 
+2 -> END
+Queue 1 : 
+END
+Queue 2 : 
+0 -> END
+Queue 3 : 
+END
