@@ -189,7 +189,6 @@ int * initProcessAllocTable(int processAllocTable_Quantum []){
 				//inputChar=getchar();
 				scanf("test %c",&inputChar);//-------------------------------------------------------------------------- on part dans le néant ici | non bloquant ca depend
 				scanf("%c",&inputChar);
-				printf("here");
 			}while(inputChar!='n');
 
 		}else if(inputChar=='m'){
@@ -347,12 +346,10 @@ int main() {
     	if(mainTabStructThreadProperties[i]->submissionDate == 0){
     		for(int y=0; y<NUMBEROFFILESPRIORITY ; y++){
     			if(mainTabStructThreadProperties[i]->priority == y){
-    				printf("here %d-%d ",i,mainTabStructThreadProperties[i]->idThread);
     				insertElement( queue[y] ,mainTabStructThreadProperties[i]);
     			}
     		}
     	}else if(mainTabStructThreadProperties[i]->submissionDate > 0){
-    		printf("HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
     		mainTabStructThreadProperties[i]->submissionDate--;
     		insertElement( waitForEnterringQueue ,mainTabStructThreadProperties[i]);
     	}else{
@@ -412,7 +409,7 @@ int main() {
     	while(threadBusy==1);//à protéger ??
 
     	if(mainTabStructThreadProperties[currentThread->idThread]->duration > 0){
-    		if(currentQueue<=NUMBEROFFILESPRIORITY-2)insertElement(queue[currentQueue+1],mainTabStructThreadProperties[currentThread->idThread]);// 	PROVISOIRE NE FCT PAS
+    		if(currentQueue<=NUMBEROFFILESPRIORITY-2)insertElement(queue[currentQueue+1],mainTabStructThreadProperties[currentThread->idThread]);
     		else insertElement(queue[0],mainTabStructThreadProperties[currentThread->idThread]);
     	}else{
     		printf("THREAD NB %hd IS DELETE\n",currentThread->idThread);
