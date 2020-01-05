@@ -193,7 +193,6 @@ int * initProcessAllocTable(int processAllocTable_Quantum []){
 				//inputChar=getchar();
 				scanf("test %c",&inputChar);//-------------------------------------------------------------------------- on part dans le néant ici | non bloquant ca depend
 				scanf("%c",&inputChar);
-				printf("here");
 			}while(inputChar!='n');
 
 		}else if(inputChar=='m'){
@@ -425,6 +424,7 @@ int main() {
     	while(threadBusy==1);//wait until the thread has finished
 
     	if(mainTabStructThreadProperties[currentThread->idThread]->duration > 0){//if the thread isn't finished you put it back in the queue corresponfing
+
     		if(currentQueue<=NUMBEROFFILESPRIORITY-2)insertElement(queue[currentQueue+1],mainTabStructThreadProperties[currentThread->idThread]);
     		else insertElement(queue[0],mainTabStructThreadProperties[currentThread->idThread]);
     	}else{//if th ethread is finished
