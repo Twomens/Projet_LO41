@@ -5,7 +5,7 @@
 #include <pthread.h>
 
 #define NUMBEROFQUANTUM 100
-#define NUMBEROFFILESPRIORITY 11
+#define NUMBEROFFILESPRIORITY 4
 #define NUMBEROFQUANTUMEXECUTED 25
 
 int numberOfThread = 0,threadBusy = 0;
