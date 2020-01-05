@@ -879,8 +879,21 @@ Queue empty
 Queue empty
 Thread Elected : 4
 Waitenteringqueue is empty END
-Nobody is remaining in queues
-Waitenteringqueue is empty END
+CURRENT QUEUE 4 CURRENT THREAD 4
+Thread 4 se réveil
+LE THREAD SE DETRUIT
+THREAD NB 4 IS DELETE
+
+Queue 0 : 
+END
+Queue 1 : 
+END
+Queue 2 : 
+END
+Queue 3 : 
+5 -> 0 -> 2 -> 1 -> END
+
+
 CURRENT QUANTUM 13
 Queue empty
 Queue empty
